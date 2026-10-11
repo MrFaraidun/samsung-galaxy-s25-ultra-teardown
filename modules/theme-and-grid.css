@@ -1,0 +1,1031 @@
+/* ==========================================================================
+   Samsung Galaxy S25 Ultra — Theme & Grid System
+   Module: modules/theme-and-grid.css
+   Craft: /anatomy technical engineering aesthetic
+   
+   Features:
+   1. Isometric dot matrix grid for .galaxy-stage (Dark & Paper Light)
+   2. Floating 3D callout pills (.callout-pill, .callout-line, .callout-badge)
+   3. Cinematic camera controls toolbar (.camera-toolbar, .camera-pill-btn)
+   4. Action triggers dock (.action-dock, .action-btn)
+   5. Flash overlay for camera shutter snap (.camera-flash-overlay)
+   6. Thermal flow animation styles (.thermal-active, .iso-flow)
+   7. Pure monochrome palette, ink hairline borders, balanced shadows
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Foundation & Design Tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+  --galaxy-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --galaxy-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --galaxy-transition: all 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  --galaxy-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  
+  /* Stage Isometric Grid Matrix Dimensions (60° / 30° Hex-Equilateral Lattice) */
+  --iso-grid-step-x: 28px;
+  --iso-grid-step-y: 48.5px;
+  --iso-grid-offset-x: 14px;
+  --iso-grid-offset-y: 24.25px;
+}
+
+/* Dark Theme (Default) */
+.iso,
+:root,
+[data-theme="dark"],
+body.iso[data-theme="dark"] {
+  /* Isometric Metrology Grid */
+  --stage-grid-dot: rgba(230, 230, 230, 0.075);
+  --stage-grid-dot-hover: rgba(255, 255, 255, 0.12);
+  --stage-grid-mask-core: rgba(0, 0, 0, 0.95);
+  --stage-grid-mask-edge: rgba(0, 0, 0, 0.25);
+
+  /* Floating Callout System */
+  --callout-bg: rgba(19, 19, 19, 0.88);
+  --callout-bg-hover: rgba(27, 27, 27, 0.95);
+  --callout-border: rgba(255, 255, 255, 0.14);
+  --callout-border-hover: rgba(255, 255, 255, 0.32);
+  --callout-border-active: #ffffff;
+  --callout-text: #e6e6e6;
+  --callout-muted: #8a8a8a;
+  --callout-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --callout-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  --callout-badge-bg: #262626;
+  --callout-badge-text: #ffffff;
+  --callout-badge-border: #3e3e3e;
+  --callout-line-stroke: #6a6a6a;
+  --callout-line-lit: #ffffff;
+
+  /* Toolbars & Dock Panels */
+  --dock-bg: rgba(19, 19, 19, 0.85);
+  --dock-bg-active: #1b1b1b;
+  --dock-border: #3e3e3e;
+  --dock-border-hi: #d4d4d4;
+  --dock-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --btn-hover-bg: #1b1b1b;
+  --btn-active-bg: #262626;
+
+  /* Sensor Flash & Overlays */
+  --camera-flash-color: #ffffff;
+
+  /* Thermal Visualization Tokens (Pure Monochrome / High Contrast) */
+  --thermal-wick-core: #ffffff;
+  --thermal-wick-pulse: rgba(255, 255, 255, 0.4);
+  --thermal-dim-opacity: 0.18;
+}
+
+/* Paper Light Theme (Strictly Pure Monochrome, Zero Blue Tints, Ink Borders) */
+[data-theme="light"],
+body.iso[data-theme="light"] {
+  /* Isometric Metrology Grid */
+  --stage-grid-dot: rgba(24, 24, 26, 0.055);
+  --stage-grid-dot-hover: rgba(24, 24, 26, 0.095);
+  --stage-grid-mask-core: rgba(0, 0, 0, 0.95);
+  --stage-grid-mask-edge: rgba(0, 0, 0, 0.2);
+
+  /* Floating Callout System — Featherlight Balanced Shadows, No Muddy Clouds */
+  --callout-bg: rgba(251, 251, 250, 0.92);
+  --callout-bg-hover: rgba(255, 255, 255, 0.98);
+  --callout-border: rgba(0, 0, 0, 0.12);
+  --callout-border-hover: rgba(0, 0, 0, 0.32);
+  --callout-border-active: #000000;
+  --callout-text: #18181a;
+  --callout-muted: #75757a;
+  --callout-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 14px rgba(0, 0, 0, 0.04);
+  --callout-shadow-hover: inset 0 1px 0 #ffffff, 0 2px 6px rgba(0, 0, 0, 0.07), 0 8px 20px rgba(0, 0, 0, 0.06);
+  --callout-badge-bg: #e5e5e2;
+  --callout-badge-text: #18181a;
+  --callout-badge-border: #b4b4b8;
+  --callout-line-stroke: #8a8a8f;
+  --callout-line-lit: #000000;
+
+  /* Toolbars & Dock Panels */
+  --dock-bg: rgba(251, 251, 250, 0.88);
+  --dock-bg-active: #ffffff;
+  --dock-border: #b4b4b8;
+  --dock-border-hi: #26262a;
+  --dock-shadow: inset 0 1px 0 #ffffff, 0 2px 5px rgba(0, 0, 0, 0.04), 0 8px 22px rgba(0, 0, 0, 0.06);
+  --btn-hover-bg: #ffffff;
+  --btn-active-bg: #e5e5e2;
+
+  /* Sensor Flash & Overlays */
+  --camera-flash-color: #ffffff;
+
+  /* Thermal Visualization Tokens (Deep Ink Contrast on Paper) */
+  --thermal-wick-core: #000000;
+  --thermal-wick-pulse: rgba(0, 0, 0, 0.35);
+  --thermal-dim-opacity: 0.16;
+}
+
+/* --------------------------------------------------------------------------
+   2. Subtle Isometric Dot Matrix Grid Pattern (.galaxy-stage)
+   -------------------------------------------------------------------------- */
+
+.galaxy-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Precision Metrology Dot Lattice Pseudo-layer */
+.galaxy-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at center, var(--stage-grid-dot) 1px, transparent 1.25px),
+    radial-gradient(circle at center, var(--stage-grid-dot) 1px, transparent 1.25px);
+  background-size: var(--iso-grid-step-x) var(--iso-grid-step-y);
+  background-position: 0 0, var(--iso-grid-offset-x) var(--iso-grid-offset-y);
+  background-repeat: repeat;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+  mask-image: radial-gradient(ellipse at 50% 50%, var(--stage-grid-mask-core) 42%, var(--stage-grid-mask-edge) 82%, transparent 98%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, var(--stage-grid-mask-core) 42%, var(--stage-grid-mask-edge) 82%, transparent 98%);
+}
+
+/* Fallback / Direct Grid Layer for Dedicated Canvas Containers */
+.galaxy-stage.has-grid-bg,
+.iso-grid-layer {
+  background-image:
+    radial-gradient(circle at center, var(--stage-grid-dot) 1px, transparent 1.25px),
+    radial-gradient(circle at center, var(--stage-grid-dot) 1px, transparent 1.25px);
+  background-size: var(--iso-grid-step-x) var(--iso-grid-step-y);
+  background-position: 0 0, var(--iso-grid-offset-x) var(--iso-grid-offset-y);
+  background-repeat: repeat;
+}
+
+.galaxy-stage:hover::before {
+  --stage-grid-dot: var(--stage-grid-dot-hover);
+}
+
+/* Ensure SVG drawing sits above the background grid with clean non-interference */
+.galaxy-stage .galaxy-svg {
+  position: relative;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   3. Floating 3D Callout Pills (.callout-pill, .callout-line, .callout-badge)
+   -------------------------------------------------------------------------- */
+
+.callout-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+
+.callout-pill {
+  position: absolute;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--callout-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--callout-border);
+  border-radius: 9999px;
+  padding: 4px 10px 4px 6px;
+  box-shadow: var(--callout-shadow);
+  color: var(--callout-text);
+  font-family: var(--galaxy-sans);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.22s var(--galaxy-ease),
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.24s ease;
+  z-index: 12;
+}
+
+.callout-pill:hover {
+  background: var(--callout-bg-hover);
+  border-color: var(--callout-border-hover);
+  box-shadow: var(--callout-shadow-hover);
+  transform: translate(-50%, calc(-50% - 2px));
+}
+
+.callout-pill:focus-visible {
+  outline: 1px solid var(--callout-border-active);
+  outline-offset: 2px;
+}
+
+/* Active / Inspected Callout State */
+.callout-pill.active,
+.callout-pill.is-active,
+.callout-pill[aria-selected="true"] {
+  border-color: var(--callout-border-active);
+  background: var(--callout-bg-hover);
+  box-shadow: var(--callout-shadow-hover);
+}
+
+.callout-pill.active .callout-badge,
+.callout-pill.is-active .callout-badge {
+  background: var(--anatomy-lit);
+  color: var(--anatomy-page);
+  border-color: var(--anatomy-lit);
+}
+
+/* Dimmed / Hidden States (When another part is isolated) */
+.callout-pill.is-dimmed {
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.callout-pill.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+/* Callout Badge (Numeric Index or Subsystem Tag) */
+.callout-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--galaxy-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--callout-badge-text);
+  background: var(--callout-badge-bg);
+  border: 1px solid var(--callout-badge-border);
+  border-radius: 9999px;
+  padding: 1.5px 6px;
+  line-height: 1.2;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Callout Inner Typography */
+.callout-body {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.callout-title {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--callout-text);
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.callout-spec,
+.callout-val {
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--callout-muted);
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Anchor Terminal Dot */
+.callout-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--callout-line-lit);
+  box-shadow: 0 0 0 1px var(--anatomy-card);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 11;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Callout Leader Lines (Crisp Hairlines in SVG and HTML) */
+svg.callout-line,
+line.callout-line,
+path.callout-line,
+polyline.callout-line {
+  stroke: var(--callout-line-stroke);
+  stroke-width: 0.75px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.callout-line[data-tone="lit"],
+.callout-line.active,
+.callout-line.is-active {
+  stroke: var(--callout-line-lit);
+  stroke-width: 1px;
+}
+
+.callout-line[data-dotted] {
+  stroke-dasharray: 0.01 3.5;
+  stroke-width: 1px;
+}
+
+.callout-line[data-dashed] {
+  stroke-dasharray: 3 3;
+}
+
+/* HTML Div Leader Line Fallback */
+div.callout-line {
+  position: absolute;
+  pointer-events: none;
+  height: 1px;
+  background: var(--callout-line-stroke);
+  transform-origin: left center;
+  z-index: 10;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+div.callout-line.active,
+div.callout-line.is-active {
+  background: var(--callout-line-lit);
+  height: 1.2px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Cinematic Camera Controls Toolbar (.camera-toolbar, .camera-pill-btn)
+   -------------------------------------------------------------------------- */
+
+.camera-toolbar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--dock-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--dock-border);
+  border-radius: 9999px;
+  padding: 4px;
+  box-shadow: var(--dock-shadow);
+  z-index: 25;
+  user-select: none;
+  transition:
+    transform 0.24s var(--galaxy-ease),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.camera-toolbar-label {
+  font-family: var(--galaxy-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--anatomy-muted);
+  padding: 0 6px 0 10px;
+  line-height: 1;
+}
+
+.camera-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: var(--anatomy-text);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  white-space: nowrap;
+}
+
+.camera-pill-btn:hover {
+  color: var(--anatomy-strong);
+  background: var(--btn-hover-bg);
+  border-color: var(--anatomy-lo);
+}
+
+.camera-pill-btn:active {
+  transform: scale(0.96);
+}
+
+.camera-pill-btn:focus-visible {
+  outline: 1px solid var(--anatomy-lit);
+  outline-offset: 1px;
+}
+
+/* Selected Zoom / Camera Lens */
+.camera-pill-btn.active,
+.camera-pill-btn.is-active,
+.camera-pill-btn[aria-pressed="true"] {
+  background: var(--dock-bg-active);
+  color: var(--anatomy-lit);
+  border-color: var(--dock-border-hi);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Shutter Trigger Button */
+.camera-shutter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: var(--anatomy-face);
+  border: 1px solid var(--anatomy-mid);
+  border-radius: 9999px;
+  color: var(--anatomy-lit);
+  font-family: var(--galaxy-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+}
+
+.camera-shutter-btn:hover {
+  background: var(--anatomy-card);
+  border-color: var(--anatomy-lit);
+  box-shadow: 0 0 0 1px var(--anatomy-lo);
+}
+
+.camera-shutter-btn:active {
+  transform: scale(0.94);
+  background: var(--anatomy-lit);
+  color: var(--anatomy-page);
+}
+
+.camera-shutter-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--anatomy-lit);
+  transition: transform 0.15s ease;
+}
+
+.camera-shutter-btn:hover .camera-shutter-dot {
+  transform: scale(1.2);
+}
+
+.camera-toolbar-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--anatomy-lo);
+  margin: 0 2px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Action Triggers Dock (.action-dock, .action-btn)
+   -------------------------------------------------------------------------- */
+
+.action-dock {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--dock-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--dock-border);
+  border-radius: 6px;
+  padding: 4px 5px;
+  box-shadow: var(--dock-shadow);
+  z-index: 20;
+  user-select: none;
+  transition:
+    transform 0.22s var(--galaxy-ease),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Floating variant inside the galaxy plate */
+.action-dock.dock-floating-top {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.action-dock.dock-floating-bottom {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 4px;
+  color: var(--anatomy-text);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-strong);
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+}
+
+.action-btn:focus-visible {
+  outline: 1px solid var(--anatomy-lit);
+  outline-offset: 1px;
+}
+
+/* Active / Toggled Action State */
+.action-btn.active,
+.action-btn.is-active,
+.action-btn[aria-pressed="true"] {
+  background: var(--dock-bg-active);
+  border-color: var(--dock-border-hi);
+  color: var(--anatomy-lit);
+  font-weight: 600;
+}
+
+.action-btn-icon {
+  font-size: 11.5px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.action-btn-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--anatomy-mid);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.action-btn.active .action-btn-dot,
+.action-btn.is-active .action-btn-dot {
+  background: var(--anatomy-lit);
+  transform: scale(1.15);
+}
+
+/* --------------------------------------------------------------------------
+   5b. Floating Telemetry Inspector HUD (.galaxy-inspector-hud)
+   -------------------------------------------------------------------------- */
+
+.galaxy-stage .galaxy-inspector-hud {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 320px;
+  max-width: calc(100% - 36px);
+  z-index: 25;
+  background: var(--callout-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--callout-border);
+  border-radius: 6px;
+  padding: 13px 15px;
+  box-shadow: var(--callout-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.galaxy-stage .galaxy-inspector-hud:hover {
+  border-color: var(--callout-border-hover);
+  box-shadow: var(--callout-shadow-hover);
+}
+
+.galaxy-stage .galaxy-inspector-hud.is-collapsed {
+  width: auto;
+  max-width: 290px;
+  padding: 6px 12px;
+  gap: 0;
+}
+
+.galaxy-inspector-hud.is-collapsed .part-detail-title,
+.galaxy-inspector-hud.is-collapsed .part-metrics-grid,
+.galaxy-inspector-hud.is-collapsed .part-desc-text,
+.galaxy-inspector-hud.is-collapsed .part-actions-row {
+  display: none !important;
+}
+
+.galaxy-inspector-hud.is-collapsed .part-detail-top {
+  margin: 0;
+}
+
+.galaxy-inspector-hud .part-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.galaxy-inspector-hud .hud-tag-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.galaxy-inspector-hud .hud-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.galaxy-inspector-hud .hud-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--callout-border);
+  border-radius: 3px;
+  color: var(--callout-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  width: 22px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  padding: 0;
+}
+
+.galaxy-inspector-hud .hud-toggle-btn:hover {
+  border-color: var(--callout-border-active);
+  color: var(--callout-text);
+  background: var(--callout-bg-hover);
+}
+
+.galaxy-inspector-hud .part-detail-num {
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--anatomy-lit);
+  background: var(--callout-badge-bg);
+  border: 1px solid var(--callout-badge-border);
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+
+.galaxy-inspector-hud .part-detail-status {
+  font-family: var(--galaxy-mono);
+  font-size: 9.5px;
+  color: var(--callout-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.galaxy-inspector-hud .hud-close-btn {
+  background: transparent;
+  border: 1px solid var(--callout-border);
+  border-radius: 3px;
+  color: var(--callout-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.galaxy-inspector-hud .hud-close-btn:hover {
+  border-color: var(--callout-border-active);
+  color: var(--callout-text);
+  background: var(--callout-bg-hover);
+}
+
+.galaxy-inspector-hud .part-detail-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--anatomy-strong);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.galaxy-inspector-hud .part-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--callout-border);
+}
+
+[data-theme="light"] .galaxy-inspector-hud .part-metrics-grid {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.galaxy-inspector-hud .part-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.galaxy-inspector-hud .metric-k {
+  color: var(--callout-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.galaxy-inspector-hud .metric-v {
+  color: var(--anatomy-strong);
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: right;
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.galaxy-inspector-hud .part-desc-text {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--callout-text);
+  opacity: 0.9;
+}
+
+.galaxy-inspector-hud .part-actions-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.galaxy-inspector-hud .part-act-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--callout-border);
+  border-radius: 3px;
+  color: var(--callout-text);
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 5px 6px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  text-align: center;
+}
+
+.galaxy-inspector-hud .part-act-btn:hover {
+  background: var(--callout-bg-hover);
+  border-color: var(--callout-border-hover);
+  color: var(--callout-text);
+}
+
+.galaxy-inspector-hud .part-act-btn.is-active {
+  background: var(--anatomy-lit);
+  color: var(--anatomy-page);
+  border-color: var(--anatomy-lit);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   6. Camera Shutter Flash Overlay (.camera-flash-overlay)
+   -------------------------------------------------------------------------- */
+
+.camera-flash-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--camera-flash-color);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 50;
+  transition: opacity 0.38s cubic-bezier(0.1, 0.9, 0.2, 1), visibility 0.38s ease;
+}
+
+/* Flash active trigger classes */
+.camera-flash-overlay.snap,
+.camera-flash-overlay.is-flashing,
+.camera-flash-overlay.active {
+  animation: camera-shutter-strobe 420ms cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes camera-shutter-strobe {
+  0% {
+    opacity: 0.92;
+    visibility: visible;
+  }
+  20% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Thermal Flow Animation Styles (.thermal-active, .iso-flow)
+   -------------------------------------------------------------------------- */
+
+/* Standard and High-speed isometric flow loops */
+@keyframes iso-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+@keyframes iso-flow-reverse {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 32;
+  }
+}
+
+@keyframes thermal-capillary-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
+@keyframes thermal-pulse {
+  0%, 100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes thermal-breathe {
+  0%, 100% {
+    stroke-width: 0.75px;
+    opacity: 0.45;
+  }
+  50% {
+    stroke-width: 1.15px;
+    opacity: 0.95;
+  }
+}
+
+/* Isometric Line Flow Selectors */
+.iso-flow,
+.iso-line[data-flow],
+.thermal-flow {
+  stroke-dasharray: 2 6;
+  animation: iso-flow 1600ms linear infinite;
+}
+
+.iso-flow-fast {
+  stroke-dasharray: 2 5;
+  animation: iso-flow 900ms linear infinite;
+}
+
+.iso-flow-reverse {
+  stroke-dasharray: 2 6;
+  animation: iso-flow-reverse 1600ms linear infinite;
+}
+
+/* Thermal Active System Mode */
+/* When .thermal-active is applied on the body, stage, scene, or assembly */
+body.thermal-active .assembly-group:not([data-id="vapor_chamber"]):not([data-id="fixture"]),
+.galaxy-scene.thermal-active .assembly-group:not([data-id="vapor_chamber"]):not([data-id="fixture"]) {
+  opacity: var(--thermal-dim-opacity);
+  transition: opacity 0.35s ease;
+}
+
+/* Vapor Chamber Core Highlighting */
+body.thermal-active .assembly-group[data-id="vapor_chamber"],
+.galaxy-scene.thermal-active .assembly-group[data-id="vapor_chamber"],
+.assembly-group[data-id="vapor_chamber"].thermal-active {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Capillary Wick and Thermal Dissipation Lines */
+body.thermal-active .assembly-group[data-id="vapor_chamber"] .iso-line[data-flow],
+.galaxy-scene.thermal-active .assembly-group[data-id="vapor_chamber"] .iso-line[data-flow],
+.assembly-group[data-id="vapor_chamber"].thermal-active .iso-line[data-flow],
+.thermal-active .thermal-wick-path {
+  stroke: var(--thermal-wick-core) !important;
+  stroke-width: 0.95px !important;
+  stroke-dasharray: 3 5 !important;
+  animation: thermal-capillary-flow 1200ms linear infinite !important;
+}
+
+/* Pulsing thermal heat dispersion nodes */
+body.thermal-active .thermal-node,
+.thermal-active .thermal-node,
+.thermal-node.thermal-active {
+  animation: thermal-pulse 1400ms ease-in-out infinite;
+}
+
+/* Perimeter thermal gradient breathers */
+body.thermal-active .thermal-perimeter,
+.thermal-perimeter.thermal-active {
+  animation: thermal-breathe 2200ms ease-in-out infinite;
+}
+
+/* --------------------------------------------------------------------------
+   8. Responsive Adaptations
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .camera-toolbar {
+    bottom: 14px;
+    padding: 3px;
+  }
+  .camera-pill-btn {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  .camera-toolbar-label {
+    display: none;
+  }
+  .action-dock.dock-floating-top {
+    top: 12px;
+    right: 12px;
+  }
+  .action-dock.dock-floating-bottom {
+    bottom: 12px;
+    right: 12px;
+  }
+  .callout-pill {
+    padding: 3px 8px 3px 5px;
+  }
+  .callout-title {
+    font-size: 10.5px;
+  }
+  .callout-spec,
+  .callout-val {
+    display: none;
+  }
+}
+
+/* Mobile overrides centralized in modules/mobile-layout.css */
+
+/* --------------------------------------------------------------------------
+   9. Motion Accessibility (prefers-reduced-motion)
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .iso-flow,
+  .iso-line[data-flow],
+  .thermal-flow,
+  .iso-flow-fast,
+  .iso-flow-reverse,
+  .camera-flash-overlay.snap,
+  .thermal-node,
+  .thermal-perimeter {
+    animation: none !important;
+  }
+
+  .callout-pill,
+  .camera-toolbar,
+  .action-dock,
+  .camera-pill-btn,
+  .action-btn {
+    transition: none !important;
+  }
+}

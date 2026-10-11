@@ -1,0 +1,849 @@
+/* ==========================================================================
+   Samsung Galaxy S25 Ultra — Clean Technical Engineering Theme (Monochrome)
+   Matches the official Anatomy craft aesthetic:
+   - Pure monochrome palette (no synthetic blue/cyan)
+   - Dark theme & Light theme with live dynamic toggle
+   - Clean card framing matching Desk Computer / Raptor Engine
+   - Tactile audio controls, responsive subsystems sidebar, and mobile drawer
+   ========================================================================== */
+
+:root {
+  --galaxy-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --galaxy-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --galaxy-transition: all 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+body.iso {
+  margin: 0;
+  padding: 24px 16px 48px;
+  background-color: var(--anatomy-page);
+  color: var(--anatomy-text);
+  font-family: var(--galaxy-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Master container */
+.galaxy-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Top Utility Bar (Theme, Sound, Sidebar toggles) */
+.galaxy-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 4px;
+  color: var(--anatomy-text);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  user-select: none;
+}
+
+.tool-btn:hover {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-strong);
+  background: var(--anatomy-face);
+}
+
+.tool-btn.active {
+  border-color: var(--anatomy-hi);
+  color: var(--anatomy-lit);
+  background: var(--anatomy-face);
+}
+
+.tool-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Plate & Card Framing */
+.iso-figure.galaxy-figure {
+  width: 100%;
+  margin: 0 0 24px;
+}
+
+.iso-plate.galaxy-plate {
+  position: relative;
+  background: var(--anatomy-card);
+  box-shadow: 0 0 0 1px var(--anatomy-lo);
+  border-radius: 0;
+  padding: 44px 20px 48px;
+  overflow: hidden;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Corner labels (Desk Computer style) */
+.iso-plate-corners {
+  position: absolute;
+  inset: 16px 18px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.iso-plate-corner {
+  position: absolute;
+  color: var(--anatomy-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.iso-plate-corner[data-corner="fig"] {
+  top: 0;
+  left: 0;
+  color: var(--anatomy-text);
+}
+
+.iso-plate-corner[data-corner="title"] {
+  top: 0;
+  right: 0;
+  color: var(--anatomy-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.iso-plate-corner[data-corner="hint"] {
+  bottom: 0;
+  left: 0;
+  color: var(--anatomy-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+}
+
+.iso-plate-corner[data-corner="readout"] {
+  bottom: 0;
+  right: 0;
+  color: var(--anatomy-strong);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* Stage Area (SVG Canvas & Interactive Layer) */
+.galaxy-stage-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 520px;
+}
+
+.galaxy-stage {
+  flex: 1;
+  position: relative;
+  outline: none;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galaxy-stage:active {
+  cursor: grabbing;
+}
+
+.galaxy-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 720px;
+  overflow: visible;
+  filter: none;
+  transition: transform 0.35s ease;
+}
+
+/* In light mode, soften the table base plate halo so it never looks dark or muddy */
+body.iso[data-theme="light"] .iso-halo {
+  opacity: 0.08 !important;
+}
+
+/* SVG Assembly Groups */
+.galaxy-scene .assembly-group {
+  cursor: pointer;
+  transition: opacity 0.28s var(--anatomy-ease), visibility 0.28s ease, filter 0.28s ease;
+}
+
+.galaxy-scene .assembly-group:hover .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 0.8px;
+}
+
+/* Solo Isolation Mode:
+   - The isolated assembly is 100% visible, fully opaque, with illuminated edges
+   - All other assemblies switch to faint CAD X-ray metrology wireframe (opacity 0.09, hairline strokes)
+   - Cleanroom Metrology Bench (data-id="fixture") stays visible at reference floor opacity 0.18
+*/
+.galaxy-scene.has-isolation .assembly-group {
+  opacity: 0.14;
+  visibility: visible;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.galaxy-scene.has-isolation .assembly-group:not(.is-isolated) .iso-poly {
+  fill: transparent !important;
+  stroke: var(--anatomy-mid) !important;
+  stroke-width: 0.4px !important;
+}
+
+.galaxy-scene.has-isolation .assembly-group:not(.is-isolated) .iso-edge {
+  stroke: var(--anatomy-mid) !important;
+  stroke-width: 0.45px !important;
+  opacity: 0.75;
+}
+
+.galaxy-scene.has-isolation .assembly-group[data-id="fixture"] {
+  opacity: 0.22;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.galaxy-scene.has-isolation .assembly-group.is-isolated {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.galaxy-scene.has-isolation .assembly-group.is-isolated .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 0.95px;
+}
+
+/* Stack Highlight Mode:
+   - All other layers remain visible in exploded positions at 0.12 opacity
+   - The isolated part stays 100% bright
+*/
+.galaxy-scene.has-stack-highlight .assembly-group {
+  opacity: 0.12;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.galaxy-scene.has-stack-highlight .assembly-group.is-isolated {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.galaxy-scene.has-stack-highlight .assembly-group.is-isolated .iso-edge {
+  stroke: var(--anatomy-lit);
+  stroke-width: 0.9px;
+}
+
+/* ==========================================================================
+   Subsystems Inspection Sidebar
+   ========================================================================== */
+
+.galaxy-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 330px;
+  background: var(--anatomy-face);
+  border-left: 1px solid var(--anatomy-lo);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s var(--anatomy-ease), opacity 0.24s ease;
+}
+
+.galaxy-sidebar.is-open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--anatomy-lo);
+  background: var(--anatomy-card);
+}
+
+.sidebar-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-badge {
+  font-family: var(--galaxy-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--anatomy-muted);
+  text-transform: uppercase;
+}
+
+.sidebar-heading {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--anatomy-strong);
+  letter-spacing: 0.02em;
+}
+
+.sidebar-close-btn {
+  background: transparent;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 4px;
+  color: var(--anatomy-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: var(--galaxy-transition);
+}
+
+.sidebar-close-btn:hover {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-lit);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Part detail card inside sidebar */
+.part-detail-box {
+  background: var(--anatomy-card);
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.part-detail-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.part-detail-num {
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--anatomy-lit);
+  background: var(--anatomy-lo);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.part-detail-status {
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  color: var(--anatomy-muted);
+  letter-spacing: 0.04em;
+}
+
+.part-detail-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--anatomy-strong);
+  line-height: 1.3;
+}
+
+.part-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  background: var(--anatomy-page);
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--anatomy-faint);
+}
+
+.part-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.metric-k {
+  color: var(--anatomy-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.metric-v {
+  color: var(--anatomy-strong);
+  font-family: var(--galaxy-mono);
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+}
+
+.part-desc-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--anatomy-text);
+}
+
+.part-actions-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.part-act-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--anatomy-mid);
+  border-radius: 3px;
+  color: var(--anatomy-strong);
+  font-family: var(--galaxy-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  text-align: center;
+}
+
+.part-act-btn:hover {
+  background: var(--anatomy-lo);
+  border-color: var(--anatomy-hi);
+  color: var(--anatomy-lit);
+}
+
+.part-act-btn.is-active {
+  background: var(--anatomy-hi);
+  color: var(--anatomy-page);
+  border-color: var(--anatomy-lit);
+  font-weight: 600;
+}
+
+/* Part List Selector */
+.sidebar-list-heading {
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--anatomy-muted);
+  margin-bottom: 6px;
+}
+
+.sidebar-parts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-part-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--anatomy-text);
+  font-size: 11.5px;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--galaxy-transition);
+}
+
+.sidebar-part-item:hover {
+  background: var(--anatomy-card);
+  border-color: var(--anatomy-faint);
+  color: var(--anatomy-strong);
+}
+
+.sidebar-part-item.active {
+  background: var(--anatomy-card);
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-lit);
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-idx {
+  font-family: var(--galaxy-mono);
+  font-size: 10px;
+  color: var(--anatomy-muted);
+}
+
+.sidebar-part-item.active .item-idx {
+  color: var(--anatomy-lit);
+  font-weight: 600;
+}
+
+.item-name {
+  font-weight: 500;
+}
+
+.item-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: transparent;
+  transition: var(--galaxy-transition);
+}
+
+.sidebar-part-item.active .item-indicator {
+  background: var(--anatomy-lit);
+}
+
+/* Stepper footer in sidebar */
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--anatomy-lo);
+  background: var(--anatomy-card);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.step-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--anatomy-lo);
+  border-radius: 3px;
+  color: var(--anatomy-text);
+  font-family: var(--galaxy-mono);
+  font-size: 10.5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  text-align: center;
+}
+
+.step-btn:hover:not(:disabled) {
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-lit);
+}
+
+.step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Clean Bottom Controls (Desk Computer Style)
+   ========================================================================== */
+
+.galaxy-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--anatomy-faint);
+  position: relative;
+  z-index: 5;
+}
+
+/* Slider Track */
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 480px;
+}
+
+.slider-label {
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--anatomy-muted);
+  white-space: nowrap;
+}
+
+.galaxy-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  background: var(--anatomy-lo);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.galaxy-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--anatomy-lit);
+  border: 1px solid var(--anatomy-mid);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+.galaxy-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--anatomy-lit);
+  border: 1px solid var(--anatomy-mid);
+  cursor: grab;
+}
+
+.galaxy-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.2);
+}
+
+.slider-readout {
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--anatomy-strong);
+  min-width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Preset Segmented Bar (Monochrome) */
+.preset-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--anatomy-page);
+  border: 1px solid var(--anatomy-lo);
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.preset-btn {
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: var(--anatomy-muted);
+  font-family: var(--galaxy-mono);
+  font-size: 11px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: var(--galaxy-transition);
+  white-space: nowrap;
+}
+
+.preset-btn:hover {
+  color: var(--anatomy-strong);
+}
+
+.preset-btn.active {
+  background: var(--anatomy-card);
+  color: var(--anatomy-lit);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Legend and Caption (Matches Desk Computer) */
+.galaxy-legend {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--anatomy-muted);
+  font-size: 13px;
+  line-height: 1.55;
+  width: 100%;
+}
+
+.iso-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.iso-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--anatomy-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 3px 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--galaxy-transition);
+  text-align: left;
+}
+
+.iso-key:hover {
+  background: var(--anatomy-card);
+  border-color: var(--anatomy-lo);
+  color: var(--anatomy-strong);
+}
+
+.iso-key.active {
+  background: var(--anatomy-card);
+  border-color: var(--anatomy-mid);
+  color: var(--anatomy-lit);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.iso-caption {
+  margin: 0;
+  color: var(--anatomy-muted);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Responsive Adaptations (Mobile < 768px and < 480px)
+   ========================================================================== */
+
+@media (max-width: 860px) {
+  .galaxy-controls {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .slider-group {
+    max-width: 100%;
+    width: 100%;
+    order: 1;
+  }
+  .preset-group {
+    order: 2;
+    flex: 1;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 680px) {
+  body.iso {
+    padding: 12px 8px 36px;
+  }
+  .galaxy-top-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .top-bar-left,
+  .top-bar-right {
+    display: contents;
+  }
+  .tool-btn {
+    justify-content: center;
+    padding: 6px 4px;
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+  }
+  .galaxy-plate {
+    padding: 40px 10px 40px;
+  }
+  .iso-plate-corner[data-corner="title"] {
+    display: none;
+  }
+  .iso-plate-corner[data-corner="hint"] {
+    display: none;
+  }
+  .iso-plate-corner[data-corner="readout"] {
+    font-size: 10px;
+  }
+  .galaxy-stage-layout {
+    min-height: 380px;
+  }
+  .preset-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 3px;
+  }
+  .preset-btn {
+    text-align: center;
+    padding: 7px 4px;
+  }
+
+  /* Mobile Bottom Sheet Drawer for Sidebar */
+  .galaxy-sidebar {
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 80vh;
+    border-left: none;
+    border-top: 1px solid var(--anatomy-lo);
+    border-radius: 14px 14px 0 0;
+    transform: translateY(100%);
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.7);
+    z-index: 100;
+  }
+  .galaxy-sidebar.is-open {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
