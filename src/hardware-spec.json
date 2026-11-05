@@ -1,0 +1,192 @@
+{
+  "device": {
+    "name": "Samsung Galaxy S25 Ultra",
+    "codename": "Eureka",
+    "dimensions": {
+      "width": 77.6,
+      "length": 162.8,
+      "thickness": 8.2,
+      "cornerRadius": 3.6,
+      "weightGrams": 218
+    },
+    "materials": {
+      "frame": "Grade 5 Titanium (Ti-6Al-4V)",
+      "chassis": "CNC 6000-series Aluminum Alloy",
+      "frontGlass": "Corning Gorilla Armor 2 with Anti-Reflective Nanocoating",
+      "rearGlass": "Satin Chemically Etched Gorilla Glass",
+      "cooling": "Sintered Copper / Titanium Composite Vapor Chamber"
+    }
+  },
+  "assemblies": [
+    {
+      "id": "rear",
+      "name": "Titanium Rear Enclosure & Lens Rings",
+      "staggerOrder": 1,
+      "moveVector": [0, 0, 95],
+      "tone": "mid",
+      "specs": {
+        "material": "Satin Corning Gorilla Armor",
+        "thickness": "0.65 mm",
+        "finish": "Bead-blasted Titanium Gray",
+        "cameraBezels": "4× Titanium PVD Outer Rings"
+      },
+      "description": "Satin-etched rear glass housing featuring independent CNC-machined titanium protective lens collars with sapphire crystal covers.",
+      "illumination": {
+        "color": "#e6e8e9",
+        "mode": "perimeter_edge"
+      }
+    },
+    {
+      "id": "wireless_coil",
+      "name": "Wireless Charging & NFC Flex Assembly",
+      "staggerOrder": 2,
+      "moveVector": [0, 0, 72],
+      "tone": "mid",
+      "specs": {
+        "type": "Multi-turn Copper Litz-Wire Coil",
+        "fastWireless": "15W Qi / Qi2 Compliant",
+        "reverseShare": "4.5W Wireless PowerShare",
+        "nfcAntenna": "Integrated Perimeter Polyimide Loop"
+      },
+      "description": "Planar concentric induction coil supporting Qi2 fast magnetic alignment and bidirectional energy transfer.",
+      "illumination": {
+        "color": "#ff9a2e",
+        "mode": "concentric_induction"
+      }
+    },
+    {
+      "id": "cameras",
+      "name": "Quad Optical Camera Cluster",
+      "staggerOrder": 3,
+      "moveVector": [18, -12, 58],
+      "tone": "hi",
+      "specs": {
+        "wide": "200 MP ISOCELL HP2, 1/1.3\", f/1.7, 24mm, OIS",
+        "ultraWide": "50 MP ISOCELL JN3, 1/2.76\", f/1.9, 13mm, 120°",
+        "tele3x": "10 MP, f/2.4, 67mm, OIS",
+        "tele5x": "50 MP Periscope Folded Prism, f/3.4, 111mm, OIS",
+        "sensors": "Laser Time-of-Flight & Dual-Tone LED"
+      },
+      "description": "Independent modular camera array anchored by a 200MP wide sensor with multi-axis VCM stabilization and a 50MP 90-degree folded periscope prism.",
+      "illumination": {
+        "color": "#00f0ff",
+        "mode": "optical_apertures"
+      }
+    },
+    {
+      "id": "motherboard",
+      "name": "Snapdragon 8 Elite Logic Board",
+      "staggerOrder": 4,
+      "moveVector": [0, 0, 42],
+      "tone": "hi",
+      "specs": {
+        "soc": "Snapdragon 8 Elite for Galaxy (3nm TSMC N3E)",
+        "cpu": "Qualcomm Oryon (2× 4.47 GHz + 6× 3.53 GHz)",
+        "gpu": "Adreno 830 GPU with Hardware Raytracing",
+        "npu": "Hexagon NPU (+45% Galaxy AI Throughput)",
+        "ram": "12GB / 16GB LPDDR5X (8533 Mbps)",
+        "storage": "256GB - 1TB UFS 4.0 Dual-Lane"
+      },
+      "description": "High-Density Interconnect (HDI) stacked multi-layer motherboard with laser-soldered EMI shield cans and package-on-package silicon.",
+      "illumination": {
+        "color": "#00e5ff",
+        "mode": "silicon_bus_traces"
+      }
+    },
+    {
+      "id": "battery",
+      "name": "5,000 mAh High-Density Power Cell",
+      "staggerOrder": 5,
+      "moveVector": [-10, 8, 30],
+      "tone": "mid",
+      "specs": {
+        "capacity": "5,000 mAh typical (19.4 Wh)",
+        "voltage": "3.88 V Nominal / 4.45 V Max",
+        "chemistry": "Lithium-Ion with Silicon-Carbon Anode",
+        "charging": "45W Super Fast Charging 2.0 (USB-PD 3.0 PPS)",
+        "mechanism": "Solvent-Free Pull-Tab Quick Release"
+      },
+      "description": "Rigid pouch battery with high-cycle silicon-carbon formulation and integrated battery management circuit board.",
+      "illumination": {
+        "color": "#00ff88",
+        "mode": "power_rails"
+      }
+    },
+    {
+      "id": "cooling",
+      "name": "Enlarged Titanium Vapor Chamber (+40%)",
+      "staggerOrder": 6,
+      "moveVector": [0, 0, 14],
+      "tone": "mid",
+      "specs": {
+        "surfaceArea": "~4,200 mm² (+40% vs S24 Ultra)",
+        "material": "Sintered Copper / Titanium Composite",
+        "thickness": "0.38 mm Ultra-Slim Profile",
+        "internalWorkingFluid": "High-Purity Deionized Water in Micro-Vacuum",
+        "thermalInterface": "Phase-Change TIM + Multilayer Graphite"
+      },
+      "description": "40% enlarged closed-loop two-phase thermal spreader routing heat from the 4.47 GHz Oryon cores down through capillary wick channels.",
+      "illumination": {
+        "color": "#00d4ff",
+        "mode": "thermal_gradient"
+      }
+    },
+    {
+      "id": "midframe",
+      "name": "Titanium Perimeter & CNC Chassis",
+      "staggerOrder": 7,
+      "moveVector": [0, 0, 0],
+      "tone": "mid",
+      "specs": {
+        "outerRail": "Grade 5 Titanium (Ti-6Al-4V) Satin Finish",
+        "midplate": "CNC Milled Aluminum-Titanium Structural Web",
+        "chambers": "Acoustic Speaker Cavity & S Pen Sealed Silo",
+        "ingress": "IP68 Liquid Silicone Perimeter Barrier"
+      },
+      "description": "The foundational skeleton: bead-blasted Grade 5 titanium outer frame bonded to precision-pocketed internal aluminum midplate.",
+      "illumination": {
+        "color": "#ffffff",
+        "mode": "structural_datum"
+      }
+    },
+    {
+      "id": "spen",
+      "name": "S Pen & EMR Induction Mechanism",
+      "staggerOrder": 8,
+      "moveVector": [22, 54, 0],
+      "tone": "hi",
+      "specs": {
+        "dimensions": "104.6 × 5.8 × 4.35 mm",
+        "technology": "Electro-Magnetic Resonance (EMR)",
+        "pressureLevels": "4,096 Levels / 0.7 mm Tip",
+        "ejectionMechanism": "Spring-Loaded Bistable Push-Push Clicker",
+        "latency": "2.8 ms Ultra-Low Latency"
+      },
+      "description": "Integrated stylus with internal ferrite antenna coil and bistable spring-loaded ejection clicker in a water-sealed chassis channel.",
+      "illumination": {
+        "color": "#ffb300",
+        "mode": "emr_induction_field"
+      }
+    },
+    {
+      "id": "display",
+      "name": "Dynamic AMOLED 2X & Gorilla Armor 2",
+      "staggerOrder": 9,
+      "moveVector": [0, 0, -50],
+      "tone": "hi",
+      "specs": {
+        "panel": "6.9-inch Dynamic AMOLED 2X Flat Panel",
+        "glass": "Corning Gorilla Armor 2 Anti-Reflective",
+        "resolution": "3120 × 1440 (QHD+, 498 ppi)",
+        "refreshRate": "1–120 Hz Variable LTPO",
+        "peakBrightness": "2,600 nits",
+        "bezels": "1.2 mm Symmetrical Micro-Bezels"
+      },
+      "description": "Anti-reflective glass laminated to an ultra-thin QHD+ LTPO OLED substrate and copper digitizer ground plane.",
+      "illumination": {
+        "color": "#ffffff",
+        "mode": "display_active_matrix"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1547 @@
+/**
+ * Galaxy S25 Ultra — Interactive Engineering Anatomy
+ * Master Exhibition Stylesheet
+ *
+ * Visual Direction:
+ * - Museum-grade dark technical exhibition hall: near-black graphite (#0b0c0e),
+ *   titanium panels (#131417), muted edge lines (#25282c), precision metal accents.
+ * - Restrained active illumination: clean white (#ffffff), metallic silver (#e2e8f0),
+ *   warm copper/amber (#ff9a2e, #d97706) for thermal flow, power green (#10b981).
+ * - Anti-Slop Directive: No neon rainbow gradients, no glassmorphism bubble cards,
+ *   no floating marketing fluff. Crisp 1px technical joints and calibrated typography.
+ */
+
+/* ==========================================================================
+   1. Design Tokens & Exhibition Theme Contract
+   ========================================================================== */
+
+:root,
+.iso {
+  /* Core Slate & Ivory Exhibition Tokens matching Anatomy reference */
+  --bg: #252728;
+  --panel: #202223;
+  --edge: #343739;
+  --line: #474b4f;
+  --accent: #ffffff;
+  --accent-hi: #ffffff;
+  --accent-dim: rgba(255, 255, 255, 0.08);
+  --accent-border: rgba(255, 255, 255, 0.28);
+  --accent-glow: rgba(255, 255, 255, 0.35);
+
+  /* Anatomy Surface & Facet Tokens (Tactile Titanium / Ceramic Bone) */
+  --anatomy-page: #252728;
+  --anatomy-card: #202223;
+  --anatomy-paper: #dedbd5;
+  --anatomy-face: #dedbd5;
+  --anatomy-top: #e4e2dd;
+  --anatomy-shade-0: #c6c6be;
+  --anatomy-shade-1: #d0d0c9;
+  --anatomy-shade-2: #dadad3;
+  --anatomy-shade-3: #e4e4de;
+  --anatomy-lit-top: #fbf9f5;
+  --anatomy-lit-shade: #edebe6;
+  --anatomy-hi: #2b2b29;
+  --anatomy-mid: #4a4945;
+  --anatomy-lo: #787670;
+  --anatomy-faint: #a8a59e;
+  --anatomy-lit: #000000;
+  --anatomy-halo: #121314;
+  --anatomy-halo-opacity: 0.55;
+  --anatomy-dot: #4a4945;
+  --anatomy-weight: 0.75px;
+
+  /* Secondary Accents (Warm Copper/Amber & Clean Power Green) */
+  --accent-silver: #d5d2cb;
+  --accent-amber: #ff9a2e;
+  --accent-amber-dim: rgba(255, 154, 46, 0.12);
+  --accent-amber-glow: rgba(255, 154, 46, 0.35);
+  --accent-green: #10b981;
+  --accent-green-dim: rgba(16, 185, 129, 0.12);
+
+  /* Tiered Neutral Surfaces */
+  --surface-raised: #2a2c2e;
+  --surface-elevated: #313436;
+  --surface-hover: #393c3f;
+  --surface-active: #42464a;
+
+  /* Metallic Materials */
+  --metal-titanium: #d5d2cb;
+  --metal-silver: #e4e2dd;
+  --metal-charcoal: #4a4945;
+
+  /* Typography Colors */
+  --text-main: #f0eee9;
+  --text-secondary: #9e978b;
+  --text-muted: #78736a;
+  --text-faint: #56534c;
+
+  /* Typography Stacks */
+  --font-mono: "DM Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Motion Timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --trans-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --trans-normal: 260ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Elevated Shadows */
+  --plate-shadow: 0 0 0 1px var(--edge), 0 20px 48px -12px rgba(0, 0, 0, 0.75);
+  --card-shadow: 0 0 0 1px var(--edge), 0 12px 32px -8px rgba(0, 0, 0, 0.55);
+}
+
+/* Light Theme Overrides (Clean Technical Engineering Spec Sheet) */
+.iso[data-theme="light"],
+body[data-theme="light"] {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --edge: #dbe0e6;
+  --line: #b8c0cc;
+  --accent: #0f172a;
+  --accent-hi: #000000;
+  --accent-dim: rgba(15, 23, 42, 0.08);
+  --accent-border: rgba(15, 23, 42, 0.25);
+  --accent-glow: rgba(15, 23, 42, 0.15);
+
+  --anatomy-page: #f4f5f7;
+  --anatomy-card: #ffffff;
+
+  --accent-silver: #475569;
+  --accent-amber: #d97706;
+  --accent-amber-dim: rgba(217, 119, 6, 0.1);
+  --accent-amber-glow: rgba(217, 119, 6, 0.25);
+  --accent-green: #059669;
+  --accent-green-dim: rgba(5, 150, 105, 0.1);
+
+  --surface-raised: #f7f8fa;
+  --surface-elevated: #edf0f5;
+  --surface-hover: #e4e8ef;
+  --surface-active: #d9dfeb;
+
+  --metal-titanium: #4b5563;
+  --metal-silver: #374151;
+  --metal-charcoal: #cbd5e1;
+
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+
+  --plate-shadow: 0 0 0 1px var(--edge), 0 12px 36px -8px rgba(15, 23, 42, 0.08);
+  --card-shadow: 0 0 0 1px var(--edge), 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+}
+
+/* ==========================================================================
+   2. Reset, Base & Body Foundation
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.iso {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.iso-page {
+  width: min(1360px, 100% - 32px);
+  margin: 36px auto 64px;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .iso-page {
+    width: 100%;
+    margin: 16px auto 40px;
+    padding: 0 12px;
+  }
+}
+
+/* ==========================================================================
+   3. Exhibition Container & Header (.s25-exhibition-wrap, .exhibition-header)
+   ========================================================================== */
+
+.s25-exhibition-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.anatomy-gallery-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px 0 20px;
+  width: 100%;
+  position: relative;
+  z-index: 300;
+}
+
+.anatomy-brand-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.anatomy-heading {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 600;
+  color: #f0eee9;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.anatomy-subheading {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  color: #9e978b;
+  letter-spacing: 0.02em;
+}
+
+.anatomy-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 2px;
+}
+
+.anatomy-btn-header {
+  appearance: none;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--trans-fast);
+  user-select: none;
+  outline: none;
+}
+
+.anatomy-btn-header:hover {
+  color: var(--text-main);
+  background: var(--surface-hover);
+  border-color: var(--line);
+}
+
+.anatomy-btn-header:active {
+  background: var(--surface-active);
+  transform: translateY(1px);
+}
+
+.anatomy-btn-header:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+.anatomy-btn-header .btn-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.anatomy-icon-link {
+  color: var(--text-muted);
+  transition: color var(--trans-fast), transform var(--trans-fast);
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--edge);
+  background: var(--surface-raised);
+}
+
+.anatomy-icon-link:hover {
+  color: var(--text-main);
+  background: var(--surface-hover);
+  border-color: var(--line);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   4. Main Stage Layout (.s25-main-stage, .s25-figure)
+   ========================================================================== */
+
+.s25-main-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.s25-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+/* ==========================================================================
+   5. Anatomy Isometric Plate (.iso-plate.s25-plate)
+   ========================================================================== */
+
+.iso-plate.s25-plate {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  padding: 44px 20px 24px;
+  box-shadow: 0 0 0 1px var(--edge), 0 18px 48px -12px rgba(0, 0, 0, 0.65);
+  overflow: visible;
+  outline: none;
+  transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+}
+
+.iso[data-theme="light"] .iso-plate.s25-plate,
+body[data-theme="light"] .iso-plate.s25-plate {
+  background: #ffffff;
+  border: 1px solid var(--edge);
+  box-shadow: 0 0 0 1px var(--edge), 0 12px 36px -8px rgba(15, 23, 42, 0.08);
+}
+
+.iso-plate.s25-plate:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+
+/* Corner Annotations (Anatomy Standard) */
+.iso-plate-corners {
+  position: absolute;
+  inset: 16px 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.iso-plate-corner {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.iso-plate-corner[data-corner="fig"] {
+  top: 0;
+  left: 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.iso-plate-corner[data-corner="title"] {
+  top: 0;
+  right: 0;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.iso-plate-corner[data-corner="hint"] {
+  bottom: 0;
+  left: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.iso-plate-corner[data-corner="readout"] {
+  right: 0;
+  bottom: 0;
+  color: var(--text-main);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .iso-plate.s25-plate {
+    padding: 38px 12px 16px;
+  }
+  .iso-plate-corners {
+    inset: 12px 14px;
+  }
+  .iso-plate-corner[data-corner="title"] {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 9.5px;
+  }
+  .iso-plate-corner[data-corner="hint"] {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   6. SVG Stage & Interactive Component Pieces (.s25-svg-container, #assemblyRoot, .it)
+   ========================================================================== */
+
+.s25-svg-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  overflow: visible;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.iso-svg.s25-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 720px;
+  overflow: visible;
+}
+
+/* Sharp non-scaling strokes across all viewports */
+.iso-svg.s25-stage path,
+.iso-svg.s25-stage circle,
+.iso-svg.s25-stage line,
+.iso-svg.s25-stage polygon {
+  vector-effect: non-scaling-stroke;
+}
+
+#assemblyRoot {
+  transform-box: fill-box;
+}
+
+/* Interactive Component Group (.it) Contract */
+.it {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity var(--trans-normal),
+    filter var(--trans-normal),
+    transform var(--trans-normal);
+}
+
+/* Subdued State */
+.it.subdued,
+.it.is-dimmed {
+  opacity: 0.2;
+  filter: grayscale(80%);
+}
+
+/* Selected State */
+.it.selected,
+.it.is-active {
+  opacity: 1;
+  filter: drop-shadow(0 0 12px var(--accent));
+}
+
+/* Parent Selection Cascade */
+.s25-stage.has-selection .it:not(.selected):not(.is-active) {
+  opacity: 0.2;
+  filter: grayscale(80%);
+}
+
+.s25-stage.has-selection .it.selected,
+.s25-stage.has-selection .it.is-active {
+  opacity: 1;
+  filter: drop-shadow(0 0 12px var(--accent));
+}
+
+/* Unselected Hover */
+.s25-stage:not(.has-selection) .it:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+
+.iso[data-theme="light"] .s25-stage:not(.has-selection) .it:hover {
+  filter: drop-shadow(0 0 6px rgba(15, 23, 42, 0.35));
+}
+
+/* ==========================================================================
+   7. Hardware Illumination & Restrained Technical Motion
+   ========================================================================== */
+
+.glow-active {
+  pointer-events: none;
+  transition: opacity var(--trans-fast);
+}
+
+@keyframes bus-packet-flow {
+  0% {
+    stroke-dasharray: 0 1000;
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dasharray: 140 1000;
+    stroke-dashoffset: -860;
+    opacity: 0;
+  }
+}
+
+.pulse.go {
+  animation: bus-packet-flow 2.4s var(--ease-out-expo) infinite;
+}
+
+@keyframes capillary-circulate {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.capillary-stream {
+  animation: capillary-circulate 1.8s linear infinite;
+}
+
+@keyframes induction-orbit {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+.induction-ring {
+  animation: induction-orbit 2.6s linear infinite;
+}
+
+@keyframes soc-core-breathe {
+  0%, 100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
+.soc-halo {
+  animation: soc-core-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes emr-tip-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+}
+
+.spen-tip-bloom {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: emr-tip-pulse 2s ease-in-out infinite;
+}
+
+@keyframes optical-sweep {
+  0%, 100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.periscope-optical-ray {
+  animation: optical-sweep 2.2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   8. Controls Bar (.s25-controls, .mode-toggles, .ctrl-btn, #explodeScrub)
+   ========================================================================== */
+
+.s25-controls {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Mode Buttons Pill Segment */
+.mode-toggles {
+  display: inline-flex;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 5px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.ctrl-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: var(--trans-fast);
+  outline: none;
+  user-select: none;
+}
+
+.ctrl-btn:hover {
+  color: var(--text-main);
+  background: var(--surface-hover);
+}
+
+.ctrl-btn.active {
+  color: #ffffff;
+  background: var(--surface-elevated);
+  border-color: var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.iso[data-theme="light"] .ctrl-btn.active {
+  color: #0f172a;
+  background: #ffffff;
+  border-color: var(--edge);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.ctrl-btn:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+.dot-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: var(--trans-fast);
+}
+
+.ctrl-btn.active .dot-indicator {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* Exploded Separation Scrubber */
+.scrub-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 200px;
+  max-width: 360px;
+  min-width: 170px;
+}
+
+.scrub-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+#explodeScrub {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--edge);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background var(--trans-fast);
+}
+
+#explodeScrub:hover {
+  background: var(--line);
+}
+
+#explodeScrub:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 3px;
+}
+
+/* Custom Thumbs */
+#explodeScrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-main);
+  border: 2px solid var(--panel);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+#explodeScrub::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+#explodeScrub::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-main);
+  border: 2px solid var(--panel);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+#explodeScrub::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.scrub-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  min-width: 38px;
+  text-align: right;
+}
+
+/* Live Status Indicator */
+.s25-live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+@keyframes live-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+  animation: live-blink 2.2s ease-in-out infinite;
+}
+
+.live-text {
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   9. Assembly Legend & Swatches matching Anatomy desk-computer standard
+   ========================================================================== */
+
+.iso-legend {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.iso-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  align-items: center;
+}
+
+.iso-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.iso-swatch {
+  width: 16px;
+  height: 10px;
+  flex: none;
+  overflow: visible;
+}
+
+.iso-swatch path {
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.iso-swatch[data-mark="flat"] path {
+  fill: var(--surface-elevated);
+}
+
+.iso-swatch-crease {
+  stroke: var(--text-muted) !important;
+}
+
+.iso-caption {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 960px;
+}
+
+/* Backward compatibility for legend chips */
+.assembly-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.legend-chip {
+  appearance: none;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  padding: 6px 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: var(--trans-fast);
+  outline: none;
+  user-select: none;
+}
+
+.legend-chip:hover {
+  background: var(--surface-hover);
+  border-color: var(--line);
+  color: var(--text-main);
+}
+
+.legend-chip:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+.legend-chip.active,
+.legend-chip[aria-pressed="true"] {
+  background: var(--accent-dim);
+  border-color: var(--text-main);
+  color: var(--text-main);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
+}
+
+.iso[data-theme="light"] .legend-chip.active,
+.iso[data-theme="light"] .legend-chip[aria-pressed="true"] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chip-num {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  transition: color var(--trans-fast);
+}
+
+.legend-chip.active .chip-num {
+  color: var(--text-main);
+}
+
+.chip-name {
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+
+/* ==========================================================================
+   10. Responsive Parts Sidebar & Inspection Drawer (.s25-sidebar)
+   ========================================================================== */
+
+.s25-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 92vw;
+  background: var(--panel);
+  border-left: 1px solid var(--edge);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.65);
+  z-index: 250;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.s25-sidebar.open {
+  transform: translateX(0);
+}
+
+.s25-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 240;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+
+.s25-sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--edge);
+  background: var(--surface-raised);
+}
+
+.sidebar-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sidebar-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.sidebar-close-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--edge);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: var(--trans-fast);
+}
+
+.sidebar-close-btn:hover {
+  color: var(--text-main);
+  border-color: var(--line);
+  background: var(--surface-hover);
+}
+
+.sidebar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--edge);
+  background: var(--surface-elevated);
+  gap: 12px;
+}
+
+.isolate-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.isolate-checkbox {
+  accent-color: var(--text-main);
+  cursor: pointer;
+}
+
+.sidebar-action-btn {
+  appearance: none;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--trans-fast);
+  outline: none;
+}
+
+.sidebar-action-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  border-color: var(--line);
+}
+
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-part-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: var(--trans-fast);
+  cursor: pointer;
+}
+
+.sidebar-part-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--line);
+}
+
+.sidebar-part-card.active {
+  border-color: var(--text-main);
+  background: var(--surface-active);
+  box-shadow: 0 0 0 1px var(--text-main);
+}
+
+.sidebar-part-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sidebar-part-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding-top: 1px;
+}
+
+.sidebar-part-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-part-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+.sidebar-part-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.sidebar-part-status {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--edge);
+  white-space: nowrap;
+}
+
+.sidebar-part-card.active .sidebar-part-status {
+  background: var(--text-main);
+  color: var(--bg);
+  border-color: var(--text-main);
+  font-weight: 600;
+}
+
+.sidebar-part-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar-part-actions .sidebar-action-btn {
+  flex: 1;
+  text-align: center;
+}
+
+/* ==========================================================================
+   10b. Specs Inspection Drawer (.s25-specs-drawer, .s25-specs-drawer.open)
+   ========================================================================== */
+
+.s25-specs-drawer {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--card-shadow);
+  position: fixed;
+  top: 72px;
+  right: 28px;
+  width: 360px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(24px);
+  transition: opacity var(--trans-normal), transform var(--trans-normal), border-color var(--trans-fast), box-shadow var(--trans-fast);
+}
+
+/* Active Inspection Slide-In */
+.s25-specs-drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 1px var(--accent-border), 0 24px 64px -12px rgba(0, 0, 0, 0.85);
+}
+
+.specs-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid var(--edge);
+  padding-bottom: 14px;
+}
+
+.specs-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  padding: 3px 8px;
+  border-radius: 3px;
+  align-self: flex-start;
+}
+
+.specs-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.specs-desc {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.specs-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  transition: var(--trans-fast);
+}
+
+.metric-row:hover {
+  background: var(--surface-hover);
+  border-color: var(--line);
+}
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.metric-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.specs-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--edge);
+}
+
+.verified-seal {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--accent-green);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.specs-close-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: var(--trans-fast);
+  outline: none;
+}
+
+.specs-close-btn:hover {
+  color: var(--text-main);
+  border-color: var(--line);
+  background: var(--surface-hover);
+}
+
+.specs-close-btn:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+/* ==========================================================================
+   11. Exhibition Footer (.exhibition-footer)
+   ========================================================================== */
+
+.exhibition-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.exhibition-footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--text-muted);
+  transition: color var(--trans-fast), border-color var(--trans-fast);
+}
+
+.exhibition-footer a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.footer-meta {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   12. Responsive Adjustments & Mobile Optimization (Down to 390px Viewport)
+   ========================================================================== */
+
+/* Tablet & Intermediate Viewports */
+@media (max-width: 1199px) {
+  .s25-specs-drawer {
+    position: fixed;
+    top: 72px;
+    right: 20px;
+    width: 340px;
+  }
+}
+
+@media (max-width: 900px) {
+  .s25-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .mode-toggles {
+    display: flex;
+    width: 100%;
+  }
+
+  .ctrl-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .scrub-container {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .s25-live-indicator {
+    justify-content: flex-start;
+  }
+}
+
+/* Mobile & Touch Responsive Sidebar Drawer */
+@media (max-width: 768px) {
+  .s25-sidebar {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 84vh;
+    border-left: none;
+    border-top: 1px solid var(--edge);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.75);
+    transform: translateY(100%);
+  }
+
+  .s25-sidebar.open {
+    transform: translateY(0);
+  }
+
+  .s25-specs-drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 14px 14px 0 0;
+    transform: translateY(100%);
+  }
+
+  .s25-specs-drawer.open {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .anatomy-gallery-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .anatomy-actions-group {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .anatomy-btn-header {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 10.5px;
+  }
+
+  .s25-svg-container {
+    min-height: 280px;
+  }
+
+  .exhibition-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Strict Mobile Viewport (max-width: 480px down to 390px / 360px): Zero Horizontal Overflow */
+@media (max-width: 480px) {
+  .iso-page {
+    width: 100%;
+    padding: 0 8px;
+    margin: 12px auto 24px;
+  }
+
+  .iso-plate.s25-plate {
+    padding: 34px 8px 16px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .iso-keys {
+    gap: 6px 14px;
+  }
+
+  .iso-key {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .s25-controls {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .ctrl-btn {
+    padding: 6px 8px;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    gap: 4px;
+  }
+
+  .dot-indicator {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrub-label {
+    font-size: 9.5px;
+  }
+
+  .scrub-val {
+    font-size: 10px;
+    min-width: 30px;
+  }
+
+  .s25-specs-drawer {
+    padding: 16px 14px;
+  }
+}
+
+/* ==========================================================================
+   13. Accessibility & Reduced Motion Prefers
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .pulse.go,
+  .capillary-stream,
+  .induction-ring,
+  .soc-halo,
+  .spen-tip-bloom,
+  .periscope-optical-ray,
+  .live-dot {
+    animation: none !important;
+  }
+}
